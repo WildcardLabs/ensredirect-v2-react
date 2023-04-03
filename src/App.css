@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+h1 {
+  margin-bottom: 24px;
+  font-weight: 500;
+  font-size: 56px;
+  line-height: 59px;
+  text-align: center;
+  letter-spacing: -0.055em;
+  color: #1b1b1b;
+  margin-top: 150px;
+}
+
+p.subtitle {
+  font-size: 21px;
+  line-height: 150%;
+  letter-spacing: -0.0225em;
+  text-align: center;
+  color: #444;
+}
+
+.centered {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
