@@ -1,5 +1,6 @@
 import { Button, Col, Image, Row } from "antd";
 import logo from "../redirect2.png";
+import { SocialIcon } from "react-social-icons";
 
 const Home = () => {
   return (
@@ -36,12 +37,31 @@ const Home = () => {
         </Button>
         <div
           style={{
-            marginTop: "50px",
+            display: "flex",
+            alignItems: "center",
+            margin: "20px",
           }}
         >
-          <a href="https://twitter.com/ensredirect" target="_blank">
-            Follow us for updates
-          </a>
+          <SocialIcon
+            network="twitter"
+            url="https://twitter.com/ensredirect"
+            target="_blank"
+            style={{
+              margin: "10px",
+              height: 35,
+              width: 35,
+            }}
+          />
+          <SocialIcon
+            network="github"
+            url="https://github.com/ENS-Redirect/ensredirect-v2-react"
+            target="_blank"
+            style={{
+              margin: "10px",
+              height: 35,
+              width: 35,
+            }}
+          />
         </div>
       </div>
     </>
