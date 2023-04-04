@@ -1,8 +1,29 @@
+import axios from "axios";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Header from "./Header";
 import { SocialIcon } from "react-social-icons";
+import { useAccount } from "wagmi";
+import React, { useEffect } from "react";
 
 const Home = () => {
+  const { address } = useAccount();
+
+  useEffect(() => {
+    if (address) {
+      fetchAddressDomains();
+    }
+  }, [address]);
+
+  const fetchAddressDomains = () => {
+    axios
+      .get(
+        `https://us-central1-matic-services.cloudfunctions.net/domainlist?address=${address}`
+      )
+      .then((response) => {
+        console.log(response);
+      });
+  };
+
   return (
     <>
       <Header />
