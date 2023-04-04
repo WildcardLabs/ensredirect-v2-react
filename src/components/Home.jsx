@@ -9,6 +9,7 @@ import { Button, Select, Space } from "antd";
 
 const Home = () => {
   const { address } = useAccount();
+  const [isNextButtonActive, setIsNextButtonActive] = useState(true);
   const [domainList, setDomainList] = useState([]);
   const [domainSelectedFromList, setDomainSelectedFromList] = useState("");
 
@@ -17,6 +18,14 @@ const Home = () => {
       fetchAddressDomains();
     }
   }, [address]);
+
+  useEffect(() => {
+    if (domainSelectedFromList) {
+      setIsNextButtonActive(false);
+    } else {
+      setIsNextButtonActive(true);
+    }
+  }, [domainSelectedFromList]);
 
   const domainSelectionComponent = () => {
     const newDomainList = domainList.map((domain) => {
@@ -58,10 +67,11 @@ const Home = () => {
               />
 
               <Button
-                type="primary"
-                size={"large"}
+                disabled={isNextButtonActive}
                 icon={<ArrowRightOutlined />}
                 onClick={showOptionSelectionModal}
+                size={"large"}
+                type="primary"
               >
                 Next
               </Button>
@@ -85,7 +95,9 @@ const Home = () => {
   };
 
   const handleSelection = (valueSelected) => {
-    setDomainSelectedFromList(valueSelected);
+    valueSelected
+      ? setDomainSelectedFromList(valueSelected)
+      : setDomainSelectedFromList("");
   };
 
   const showOptionSelectionModal = () => {
