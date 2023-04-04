@@ -10,7 +10,7 @@ const Header = () => {
           <Image src={logo} height={36} width={36} preview={false}></Image>
         </Col>
         <Col span={5} offset={11} type="flex" align="middle">
-          <ConnectButton />
+          <ConnectButton showBalance={false} chainStatus={"none"} />
         </Col>
       </Row>
     </>
