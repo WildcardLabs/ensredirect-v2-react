@@ -5,13 +5,14 @@ import Header from "./Header";
 import { SocialIcon } from "react-social-icons";
 import { useAccount } from "wagmi";
 import React, { useEffect, useState } from "react";
-import { Button, Select, Space } from "antd";
+import { Button, Modal, Select, Space } from "antd";
 
 const Home = () => {
   const { address } = useAccount();
   const [isNextButtonActive, setIsNextButtonActive] = useState(true);
   const [domainList, setDomainList] = useState([]);
   const [domainSelectedFromList, setDomainSelectedFromList] = useState("");
+  const [optionsModalOpen, setOptionsModalOpen] = useState(false);
 
   useEffect(() => {
     if (address) {
@@ -101,7 +102,7 @@ const Home = () => {
   };
 
   const showOptionSelectionModal = () => {
-    //TODO show modal with two buttons to allow selection of option in order to move forward.
+    setOptionsModalOpen(true);
   };
 
   return (
@@ -160,6 +161,48 @@ const Home = () => {
           />
         </div>
       </div>
+      <Modal
+        centered
+        title={"Select option to proceed:"}
+        open={optionsModalOpen}
+        onOk={() => setOptionsModalOpen(false)}
+        onCancel={() => setOptionsModalOpen(false)}
+      >
+        <Space direction="vertical">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Button
+              disabled={isNextButtonActive}
+              icon={<ArrowRightOutlined />}
+              onClick={showOptionSelectionModal}
+              size={"large"}
+              type="primary"
+              style={{ margin: "20px", alignSelf: "center", width: "350px" }}
+            >
+              Redirect to any website
+            </Button>
+            <Button
+              disabled={isNextButtonActive}
+              icon={<ArrowRightOutlined />}
+              onClick={showOptionSelectionModal}
+              size={"large"}
+              type="primary"
+              style={{
+                marginBottom: "20px",
+                alignSelf: "center",
+                width: "350px",
+              }}
+            >
+              Generate your web3 profile
+            </Button>
+          </div>
+        </Space>
+      </Modal>
     </>
   );
 };
