@@ -1,23 +1,118 @@
-import { Button, Col, Image, Row } from "antd";
-import logo from "../redirect2.png";
+import axios from "axios";
+import { ArrowRightOutlined } from "@ant-design/icons";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Header from "./Header";
 import { SocialIcon } from "react-social-icons";
+import { useAccount } from "wagmi";
+import React, { useEffect, useState } from "react";
+import { Button, Select, Space } from "antd";
 
 const Home = () => {
+  const { address } = useAccount();
+  const [isNextButtonActive, setIsNextButtonActive] = useState(true);
+  const [domainList, setDomainList] = useState([]);
+  const [domainSelectedFromList, setDomainSelectedFromList] = useState("");
+
+  useEffect(() => {
+    if (address) {
+      fetchAddressDomains();
+    }
+  }, [address]);
+
+  useEffect(() => {
+    if (domainSelectedFromList) {
+      setIsNextButtonActive(false);
+    } else {
+      setIsNextButtonActive(true);
+    }
+  }, [domainSelectedFromList]);
+
+  const domainSelectionComponent = () => {
+    const newDomainList = domainList.map((domain) => {
+      let domainObject = {};
+      domainObject["label"] = domain;
+      domainObject["value"] = domain;
+      return domainObject;
+    });
+
+    return (
+      <>
+        {address ? ( //TODO return side by side with next button
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              margin: "20px",
+            }}
+          >
+            <Space wrap>
+              <Select
+                allowClear
+                showSearch
+                placeholder="Select your ENS name"
+                options={newDomainList}
+                onChange={handleSelection}
+                optionFilterProp="children"
+                style={{
+                  width: 200,
+                }}
+                filterOption={(input, option) =>
+                  (option?.label ?? "").includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+              />
+
+              <Button
+                disabled={isNextButtonActive}
+                icon={<ArrowRightOutlined />}
+                onClick={showOptionSelectionModal}
+                size={"large"}
+                type="primary"
+              >
+                Next
+              </Button>
+            </Space>
+          </div>
+        ) : (
+          <ConnectButton showBalance={false} chainStatus={"none"} />
+        )}
+      </>
+    );
+  };
+
+  const fetchAddressDomains = () => {
+    axios
+      .get(
+        `https://us-central1-matic-services.cloudfunctions.net/domainlist?address=${address}`
+      )
+      .then((response) => {
+        setDomainList(response.data);
+      });
+  };
+
+  const handleSelection = (valueSelected) => {
+    valueSelected
+      ? setDomainSelectedFromList(valueSelected)
+      : setDomainSelectedFromList("");
+  };
+
+  const showOptionSelectionModal = () => {
+    //TODO show modal with two buttons to allow selection of option in order to move forward.
+  };
+
   return (
     <>
-      <Row justify="center" style={{ marginTop: "30px" }}>
-        <Col span={8} type="flex" align="middle">
-          <Image src={logo} height={36} width={36} preview={false}></Image>
-        </Col>
-        <Col span={8} offset={8} type="flex" align="middle">
-          <Button type="primary" size={"large"}>
-            Connect Wallet
-          </Button>
-        </Col>
-      </Row>
+      <Header />
       <h1>Add utility to your ENS name</h1>
-      <p class="subtitle"> Maximize Your web3 presence with your ENS domain!</p>
-      <p class="subtitle">
+      <p className="subtitle">
+        {" "}
+        Maximize Your web3 presence with your ENS domain!
+      </p>
+      <p className="subtitle">
         Connect with your audience everywhere by easily redirecting your domain
         with ENSRedirect.
       </p>
@@ -28,13 +123,14 @@ const Home = () => {
           flexDirection: "column",
         }}
       >
-        <Button
-          type="primary"
-          size={"large"}
-          style={{ width: "30vh", marginTop: "40px" }}
+        <div
+          style={{
+            margin: "40px",
+          }}
         >
-          Connect Wallet
-        </Button>
+          {domainSelectionComponent()}
+        </div>
+
         <div
           style={{
             display: "flex",
