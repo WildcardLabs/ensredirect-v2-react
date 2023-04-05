@@ -5,14 +5,22 @@ import Header from "./Header";
 import { SocialIcon } from "react-social-icons";
 import { useAccount } from "wagmi";
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Select, Space } from "antd";
+import { Button, Col, Input, Modal, Row, Select, Space } from "antd";
 
 const Home = () => {
+  const protocolAndDomainRE = /^(?:\w+:)?\/\/(\S+)$/;
+  const localhostDomainRE = /^localhost[\:?\d]*(?:[^\:?\d]\S*)?$/;
+  const nonLocalhostDomainRE = /^[^\s\.]+\.\S{2,}$/;
+
   const { address } = useAccount();
   const [isNextButtonActive, setIsNextButtonActive] = useState(true);
   const [domainList, setDomainList] = useState([]);
   const [domainSelectedFromList, setDomainSelectedFromList] = useState("");
   const [optionsModalOpen, setOptionsModalOpen] = useState(false);
+  const [redirectionModalOpen, setRedirectionModalOpen] = useState(true);
+  const [redirectUrlInputFieldStatus, setRedirectUrlInputFieldStatus] =
+    useState("");
+  const [redirectUrlValue, setRedirectUrlValue] = useState("");
 
   useEffect(() => {
     if (address) {
@@ -38,7 +46,7 @@ const Home = () => {
 
     return (
       <>
-        {address ? ( //TODO return side by side with next button
+        {address ? (
           <div
             style={{
               display: "flex",
@@ -95,6 +103,11 @@ const Home = () => {
       });
   };
 
+  const handleRedirectClick = () => {
+    setOptionsModalOpen(false);
+    setRedirectionModalOpen(true);
+  };
+
   const handleSelection = (valueSelected) => {
     valueSelected
       ? setDomainSelectedFromList(valueSelected)
@@ -104,6 +117,31 @@ const Home = () => {
   const showOptionSelectionModal = () => {
     setOptionsModalOpen(true);
   };
+
+  function isUrl(string) {
+    if (typeof string !== "string") {
+      return false;
+    }
+
+    var match = string.match(protocolAndDomainRE);
+    if (!match) {
+      return false;
+    }
+
+    var everythingAfterProtocol = match[1];
+    if (!everythingAfterProtocol) {
+      return false;
+    }
+
+    if (
+      localhostDomainRE.test(everythingAfterProtocol) ||
+      nonLocalhostDomainRE.test(everythingAfterProtocol)
+    ) {
+      return true;
+    }
+
+    return false;
+  }
 
   return (
     <>
@@ -126,7 +164,8 @@ const Home = () => {
       >
         <div
           style={{
-            margin: "40px",
+            marginTop: "20px",
+            marginLeft: "30px",
           }}
         >
           {domainSelectionComponent()}
@@ -136,33 +175,34 @@ const Home = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            margin: "20px",
+            marginTop: "20px",
           }}
         >
-          <SocialIcon
-            network="twitter"
-            url="https://twitter.com/ensredirect"
-            target="_blank"
-            style={{
-              margin: "10px",
-              height: 35,
-              width: 35,
-            }}
-          />
-          <SocialIcon
-            network="github"
-            url="https://github.com/ENS-Redirect/ensredirect-v2-react"
-            target="_blank"
-            style={{
-              margin: "10px",
-              height: 35,
-              width: 35,
-            }}
-          />
+          <Space>
+            <SocialIcon
+              network="twitter"
+              url="https://twitter.com/ensredirect"
+              target="_blank"
+              style={{
+                height: 35,
+                width: 35,
+              }}
+            />
+            <SocialIcon
+              network="github"
+              url="https://github.com/ENS-Redirect/ensredirect-v2-react"
+              target="_blank"
+              style={{
+                height: 35,
+                width: 35,
+              }}
+            />
+          </Space>
         </div>
       </div>
       <Modal
         centered
+        footer={null}
         title={"Select option to proceed:"}
         open={optionsModalOpen}
         onOk={() => setOptionsModalOpen(false)}
@@ -179,10 +219,15 @@ const Home = () => {
             <Button
               disabled={isNextButtonActive}
               icon={<ArrowRightOutlined />}
-              onClick={showOptionSelectionModal}
+              onClick={handleRedirectClick}
               size={"large"}
               type="primary"
-              style={{ margin: "20px", alignSelf: "center", width: "350px" }}
+              style={{
+                margin: "20px",
+                alignSelf: "center",
+                width: "350px",
+                textAlign: "left",
+              }}
             >
               Redirect to any website
             </Button>
@@ -196,12 +241,68 @@ const Home = () => {
                 marginBottom: "20px",
                 alignSelf: "center",
                 width: "350px",
+                textAlign: "left",
               }}
             >
               Generate your web3 profile
             </Button>
           </div>
         </Space>
+      </Modal>
+      <Modal
+        centered
+        open={redirectionModalOpen}
+        footer={null}
+        onCancel={() => setRedirectionModalOpen(false)}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <p>Redirect {domainSelectedFromList} to </p>
+        </div>
+
+        <Row
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            margin: "10px",
+            marginBottom: "30px",
+          }}
+        >
+          <Col span={16}>
+            <Input
+              style={{ height: "40px" }}
+              placeholder="Enter website url to redirect to"
+              status={redirectUrlInputFieldStatus}
+              value={redirectUrlValue}
+              onChange={(e) => {
+                const url = e.target.value;
+                setRedirectUrlValue(url);
+                if (url !== "" && !isUrl(url)) {
+                  setRedirectUrlInputFieldStatus("error");
+                } else {
+                  setRedirectUrlInputFieldStatus("");
+                }
+              }}
+            />
+          </Col>
+          <Col offset={1} span={7}>
+            <Button
+              icon={<ArrowRightOutlined />}
+              size={"small"}
+              type="primary"
+              onClick={handleRedirectClick}
+              style={{ height: "40px" }}
+            >
+              Redirect
+            </Button>
+          </Col>
+        </Row>
       </Modal>
     </>
   );
