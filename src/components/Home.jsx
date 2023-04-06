@@ -6,6 +6,7 @@ import { SocialIcon } from "react-social-icons";
 import { useAccount } from "wagmi";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Input, Modal, Row, Select, Space } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const protocolAndDomainRE = /^(?:\w+:)?\/\/(\S+)$/;
@@ -16,6 +17,7 @@ const Home = () => {
   const [isNextButtonActive, setIsNextButtonActive] = useState(true);
   const [domainList, setDomainList] = useState([]);
   const [domainSelectedFromList, setDomainSelectedFromList] = useState("");
+  const navigate = useNavigate();
   const [optionsModalOpen, setOptionsModalOpen] = useState(false);
   const [redirectionModalOpen, setRedirectionModalOpen] = useState(true);
   const [redirectUrlInputFieldStatus, setRedirectUrlInputFieldStatus] =
@@ -114,6 +116,14 @@ const Home = () => {
       : setDomainSelectedFromList("");
   };
 
+  const navigateToProfilePage = () => {
+    navigate("/profile", {
+      state: {
+        address,
+      },
+    });
+  };
+
   const showOptionSelectionModal = () => {
     setOptionsModalOpen(true);
   };
@@ -186,6 +196,7 @@ const Home = () => {
               style={{
                 height: 35,
                 width: 35,
+                marginLeft: address ? 0 : 30,
               }}
             />
             <SocialIcon
@@ -234,7 +245,7 @@ const Home = () => {
             <Button
               disabled={isNextButtonActive}
               icon={<ArrowRightOutlined />}
-              onClick={showOptionSelectionModal}
+              onClick={navigateToProfilePage}
               size={"large"}
               type="primary"
               style={{
