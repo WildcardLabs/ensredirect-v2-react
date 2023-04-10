@@ -1,8 +1,24 @@
 import { Col, Image, Row } from "antd";
 import logo from "../redirect2.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import { useContext } from "react";
+import ActiveStateContext from "./Context";
 
 const Header = () => {
+  useAccount({
+    onConnect({ address, connector, isReconnected }) {
+      setAddress(address);
+      setIsConnected(true);
+      console.log("Connected in header", { address, connector, isReconnected });
+    },
+    onDisconnect() {
+      setIsConnected(false);
+      console.log("Disconnected in header");
+    },
+  });
+
+  const { setAddress, setIsConnected } = useContext(ActiveStateContext);
   return (
     <>
       <Row justify="center" style={{ marginTop: "30px" }}>

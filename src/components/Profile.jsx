@@ -1,17 +1,21 @@
 import Header from "./Header";
-import { Button, Form, Input, Spin } from "antd";
-import { useEffect, useState } from "react";
+import { Button, Form, Input, Spin, Row } from "antd";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { SocialIcon } from "react-social-icons";
-import { useLocation } from "react-router-dom";
+import ActiveStateContext from "./Context";
 
 const Profile = () => {
+  const { isConnected, setAddress } = useContext(ActiveStateContext);
   const [loading, setLoading] = useState(false);
-  const { state } = useLocation();
+  const navigate = useNavigate();
 
-  //TODO check how to react to disconnection when in profile page and move user back to home page
-  // useEffect(() => {
-  //   console.log("State value of address is " + state.address);
-  // }, [state]);
+  useEffect(() => {
+    if (!isConnected) {
+      setAddress("");
+      navigate(-1);
+    }
+  }, [isConnected]);
 
   return (
     <>
@@ -19,7 +23,6 @@ const Profile = () => {
       <div
         style={{
           width: "100vw",
-          height: "100vh",
           marginTop: "200px",
           justifyContent: "center",
           display: "flex",
@@ -105,16 +108,31 @@ const Profile = () => {
               style={{ width: "60vw" }}
             />
           </Form.Item>
-
-          {loading ? (
-            <Spin />
-          ) : (
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          )}
         </Form>
       </div>
+      {loading ? (
+        <Spin />
+      ) : (
+        <Row
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            margin: "10px",
+            marginBottom: "30px",
+          }}
+        >
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{
+              display: "flex",
+            }}
+          >
+            Submit
+          </Button>
+        </Row>
+      )}
     </>
   );
 };

@@ -3,23 +3,23 @@ import { ArrowRightOutlined } from "@ant-design/icons";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Header from "./Header";
 import { SocialIcon } from "react-social-icons";
-import { useAccount } from "wagmi";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Input, Modal, Row, Select, Space } from "antd";
 import { useNavigate } from "react-router-dom";
+import ActiveStateContext from "./Context";
 
 const Home = () => {
+  const { address } = useContext(ActiveStateContext);
   const protocolAndDomainRE = /^(?:\w+:)?\/\/(\S+)$/;
   const localhostDomainRE = /^localhost[\:?\d]*(?:[^\:?\d]\S*)?$/;
   const nonLocalhostDomainRE = /^[^\s\.]+\.\S{2,}$/;
 
-  const { address } = useAccount();
   const [isNextButtonActive, setIsNextButtonActive] = useState(true);
   const [domainList, setDomainList] = useState([]);
   const [domainSelectedFromList, setDomainSelectedFromList] = useState("");
   const navigate = useNavigate();
   const [optionsModalOpen, setOptionsModalOpen] = useState(false);
-  const [redirectionModalOpen, setRedirectionModalOpen] = useState(true);
+  const [redirectionModalOpen, setRedirectionModalOpen] = useState(false);
   const [redirectUrlInputFieldStatus, setRedirectUrlInputFieldStatus] =
     useState("");
   const [redirectUrlValue, setRedirectUrlValue] = useState("");
@@ -117,11 +117,7 @@ const Home = () => {
   };
 
   const navigateToProfilePage = () => {
-    navigate("/profile", {
-      state: {
-        address,
-      },
-    });
+    navigate("/profile");
   };
 
   const showOptionSelectionModal = () => {
@@ -318,4 +314,5 @@ const Home = () => {
     </>
   );
 };
+
 export default Home;
