@@ -10,11 +10,10 @@ const Header = () => {
     onConnect({ address, connector, isReconnected }) {
       setAddress(address);
       setIsConnected(true);
-      console.log("Connected in header", { address, connector, isReconnected });
     },
     onDisconnect() {
+      setAddress("");
       setIsConnected(false);
-      console.log("Disconnected in header");
     },
   });
 

@@ -81,7 +81,8 @@ const Home = () => {
                 disabled={isNextButtonActive}
                 icon={<ArrowRightOutlined />}
                 onClick={showOptionSelectionModal}
-                size={"large"}
+                size={"middle"}
+                shape="round"
                 type="primary"
               >
                 Next
@@ -157,9 +158,14 @@ const Home = () => {
         {" "}
         Maximize Your web3 presence with your ENS domain!
       </p>
-      <p className="subtitle">
-        Connect with your audience everywhere by easily redirecting your domain
-        with ENSRedirect.
+      <p
+        className="subtitle"
+        style={{ margin: "30px", marginLeft: "200px", marginRight: "200px" }}
+      >
+        Add utility to your .eth domain with ENSRedirect! Curate and showcase
+        your web3 profile by seamlessly integrating videos and podcasts from
+        your favorite social platforms, or easily redirect your domain to any
+        website of your choice – all for free.
       </p>
       <div
         style={{

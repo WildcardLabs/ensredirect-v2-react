@@ -125,6 +125,7 @@ const Profile = () => {
           <Button
             type="primary"
             htmlType="submit"
+            size={"large"}
             style={{
               display: "flex",
             }}
