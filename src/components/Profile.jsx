@@ -1,5 +1,7 @@
 import Header from "./Header";
-import { Button, Form, Input, Spin, Row } from "antd";
+import { ArrowRightOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Modal, Row, Space, Spin } from "antd";
+import { FaPodcast } from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SocialIcon } from "react-social-icons";
@@ -9,6 +11,7 @@ const Profile = () => {
   const { isConnected, setAddress } = useContext(ActiveStateContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [optionsModalOpen, setOptionsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!isConnected) {
@@ -23,7 +26,7 @@ const Profile = () => {
       <div
         style={{
           width: "100vw",
-          marginTop: "120px",
+          marginTop: "80px",
           justifyContent: "center",
           display: "flex",
         }}
@@ -124,6 +127,21 @@ const Profile = () => {
               style={{ width: "60vw" }}
             />
           </Form.Item>
+
+          <Form.Item name="AppleIcon">
+            <FaPodcast
+              style={{
+                height: 25,
+                width: 25,
+              }}
+            />
+          </Form.Item>
+          <Form.Item name="AppleLink">
+            <Input
+              placeholder="Enter your Apple podcast link"
+              style={{ width: "60vw" }}
+            />
+          </Form.Item>
         </Form>
       </div>
       {loading ? (
@@ -142,14 +160,60 @@ const Profile = () => {
             type="primary"
             htmlType="submit"
             size={"large"}
+            onClick={() => setOptionsModalOpen(true)}
             style={{
               display: "flex",
             }}
           >
-            Submit
+            Confirm profile
           </Button>
         </Row>
       )}
+      <Modal
+        centered
+        title={"Select option to proceed:"}
+        footer={null}
+        open={optionsModalOpen}
+        onOk={() => setOptionsModalOpen(false)}
+        onCancel={() => setOptionsModalOpen(false)}
+      >
+        <Space direction="vertical">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Button
+              icon={<ArrowRightOutlined />}
+              size={"large"}
+              type="primary"
+              style={{
+                margin: "20px",
+                alignSelf: "center",
+                width: "350px",
+                textAlign: "left",
+              }}
+            >
+              Preview Profile
+            </Button>
+            <Button
+              icon={<ArrowRightOutlined />}
+              size={"large"}
+              type="primary"
+              style={{
+                marginBottom: "20px",
+                alignSelf: "center",
+                width: "350px",
+                textAlign: "left",
+              }}
+            >
+              Continue
+            </Button>
+          </div>
+        </Space>
+      </Modal>
     </>
   );
 };
