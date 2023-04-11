@@ -371,7 +371,9 @@ const Home = () => {
             flexDirection: "column",
           }}
         >
-          <p>Redirect {domainSelectedFromList} to </p>
+          <p>
+            Redirect <b>{domainSelectedFromList}</b> to{" "}
+          </p>
         </div>
 
         <Row
