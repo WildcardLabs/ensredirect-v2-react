@@ -3,6 +3,7 @@ import logo from "../redirect2.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useSigner } from "wagmi";
 import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ActiveStateContext from "./Context";
 
 const Header = () => {
@@ -17,6 +18,8 @@ const Header = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const { data: signer } = useSigner();
 
   useEffect(() => {
@@ -29,7 +32,9 @@ const Header = () => {
     <>
       <Row justify="center" style={{ marginTop: "30px" }}>
         <Col span={8} type="flex" align="middle">
-          <Image src={logo} height={36} width={36} preview={false}></Image>
+          <div onClick={() => navigate("/")}>
+            <Image src={logo} height={36} width={36} preview={false}></Image>
+          </div>
         </Col>
         <Col span={5} offset={11} type="flex" align="middle">
           <ConnectButton showBalance={false} chainStatus={"none"} />
