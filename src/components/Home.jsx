@@ -1,15 +1,20 @@
 import axios from "axios";
+import { ethers } from "ethers";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Header from "./Header";
 import { SocialIcon } from "react-social-icons";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Col, Input, Modal, Row, Select, Space } from "antd";
+import { Button, Col, Input, message, Modal, Row, Select, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 import ActiveStateContext from "./Context";
 
 const Home = () => {
-  const { address } = useContext(ActiveStateContext);
+  const { address, signer } = useContext(ActiveStateContext);
+  const [messageApi, contextHolder] = message.useMessage();
+  const domainabi = [
+    "function setContenthash(bytes32 node, bytes calldata hash)",
+  ];
   const protocolAndDomainRE = /^(?:\w+:)?\/\/(\S+)$/;
   const localhostDomainRE = /^localhost[\:?\d]*(?:[^\:?\d]\S*)?$/;
   const nonLocalhostDomainRE = /^[^\s\.]+\.\S{2,}$/;
@@ -23,7 +28,6 @@ const Home = () => {
   const [redirectUrlInputFieldStatus, setRedirectUrlInputFieldStatus] =
     useState("");
   const [redirectUrlValue, setRedirectUrlValue] = useState("");
-
   useEffect(() => {
     if (address) {
       fetchAddressDomains();
@@ -90,7 +94,11 @@ const Home = () => {
             </Space>
           </div>
         ) : (
-          <ConnectButton showBalance={false} chainStatus={"none"} />
+          <ConnectButton
+            showBalance={false}
+            chainStatus={"none"}
+            label={"Get Started"}
+          />
         )}
       </>
     );
@@ -109,6 +117,36 @@ const Home = () => {
   const handleRedirectClick = () => {
     setOptionsModalOpen(false);
     setRedirectionModalOpen(true);
+  };
+
+  const handleRedirectOptionSubmission = () => {
+    const provider = new ethers.providers.AlchemyProvider(
+      "homestead",
+      process.env.REACT_APP_ALCHEMY_ID
+    );
+
+    axios
+      .get(
+        `https://us-central1-matic-services.cloudfunctions.net/redirect?web=${redirectUrlValue}&ens=${domainSelectedFromList}&address=${address}`
+      )
+      .then((response) => {
+        const ensContract = new ethers.Contract(
+          response.data.resolver,
+          domainabi,
+          signer
+        );
+        ensContract
+          .setContenthash(response.data.node, response.data.ipfs)
+          .then((trx) => {})
+          .catch((_) => {
+            setRedirectionModalOpen(false);
+            setRedirectUrlValue("");
+            messageApi.open({
+              type: "error",
+              content: "Transaction cancelled by user.",
+            });
+          });
+      });
   };
 
   const handleSelection = (valueSelected) => {
@@ -152,6 +190,7 @@ const Home = () => {
 
   return (
     <>
+      {contextHolder}
       <Header />
       <h1>Add utility to your ENS name</h1>
       <p className="subtitle">
@@ -188,12 +227,22 @@ const Home = () => {
             display: "flex",
             alignItems: "center",
             marginTop: "20px",
+            flexDirection: "column",
           }}
         >
+          <p
+            style={{
+              marginLeft: address ? 0 : 34,
+              fontSize: 21,
+              fontWeight: "bold",
+            }}
+          >
+            Get in touch
+          </p>
           <Space>
             <SocialIcon
-              network="twitter"
-              url="https://twitter.com/ensredirect"
+              network="email"
+              url="team@ensredirect.xyz"
               target="_blank"
               style={{
                 height: 35,
@@ -201,6 +250,17 @@ const Home = () => {
                 marginLeft: address ? 0 : 30,
               }}
             />
+            <p>team@ensredirect.xyz</p>
+            <SocialIcon
+              network="twitter"
+              url="https://twitter.com/ensredirect"
+              target="_blank"
+              style={{
+                height: 35,
+                width: 35,
+              }}
+            />
+            <p>@ensredirect</p>
             <SocialIcon
               network="github"
               url="https://github.com/ENS-Redirect/ensredirect-v2-react"
@@ -210,6 +270,7 @@ const Home = () => {
                 width: 35,
               }}
             />
+            <p>Github</p>
           </Space>
         </div>
       </div>
@@ -309,7 +370,7 @@ const Home = () => {
               icon={<ArrowRightOutlined />}
               size={"small"}
               type="primary"
-              onClick={handleRedirectClick}
+              onClick={handleRedirectOptionSubmission}
               style={{ height: "40px" }}
             >
               Redirect

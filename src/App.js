@@ -33,7 +33,15 @@ const wagmiClient = createClient({
 const App = () => {
   const [address, setAddress] = useState("");
   const [isConnected, setIsConnected] = useState(null);
-  const context = { isConnected, setIsConnected, address, setAddress };
+  const [signer, setSigner] = useState({});
+  const context = {
+    isConnected,
+    setIsConnected,
+    address,
+    setAddress,
+    signer,
+    setSigner,
+  };
 
   return (
     <WagmiConfig client={wagmiClient}>

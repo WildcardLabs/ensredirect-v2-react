@@ -1,8 +1,8 @@
 import { Col, Image, Row } from "antd";
 import logo from "../redirect2.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
-import { useContext } from "react";
+import { useAccount, useSigner } from "wagmi";
+import { useContext, useEffect } from "react";
 import ActiveStateContext from "./Context";
 
 const Header = () => {
@@ -17,7 +17,14 @@ const Header = () => {
     },
   });
 
-  const { setAddress, setIsConnected } = useContext(ActiveStateContext);
+  const { data: signer } = useSigner();
+
+  useEffect(() => {
+    setSigner(signer);
+  }, [signer]);
+
+  const { setAddress, setIsConnected, setSigner } =
+    useContext(ActiveStateContext);
   return (
     <>
       <Row justify="center" style={{ marginTop: "30px" }}>

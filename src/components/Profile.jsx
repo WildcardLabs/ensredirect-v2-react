@@ -23,7 +23,7 @@ const Profile = () => {
       <div
         style={{
           width: "100vw",
-          marginTop: "200px",
+          marginTop: "120px",
           justifyContent: "center",
           display: "flex",
         }}
@@ -105,6 +105,22 @@ const Profile = () => {
           <Form.Item name="SpotifyLink">
             <Input
               placeholder="Enter your Spotify link"
+              style={{ width: "60vw" }}
+            />
+          </Form.Item>
+
+          <Form.Item name="VimeoIcon">
+            <SocialIcon
+              network="vimeo"
+              style={{
+                height: 25,
+                width: 25,
+              }}
+            />
+          </Form.Item>
+          <Form.Item name="VimeoLink">
+            <Input
+              placeholder="Enter your Vimeo link"
               style={{ width: "60vw" }}
             />
           </Form.Item>
