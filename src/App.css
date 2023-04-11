@@ -39,8 +39,8 @@
 
 h1 {
   margin-bottom: 24px;
-  font-weight: 500;
-  font-size: 56px;
+  font-weight: 900;
+  font-size: 60px;
   line-height: 59px;
   text-align: center;
   letter-spacing: -0.055em;
@@ -61,4 +61,22 @@ p.subtitle {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@font-face {
+  font-family: Circular;
+  src: url("/src/font/CircularStd-Book_grayscale.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Circular-medium;
+  src: url("/src/font/CircularStd-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+
+body {
+  font-family: Circular, sans-serif;
 }
