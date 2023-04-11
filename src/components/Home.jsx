@@ -5,7 +5,17 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Header from "./Header";
 import { SocialIcon } from "react-social-icons";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Col, Input, message, Modal, Row, Select, Space } from "antd";
+import {
+  Button,
+  Col,
+  Input,
+  message,
+  Modal,
+  Result,
+  Row,
+  Select,
+  Space,
+} from "antd";
 import { useNavigate } from "react-router-dom";
 import ActiveStateContext from "./Context";
 
@@ -20,14 +30,19 @@ const Home = () => {
   const nonLocalhostDomainRE = /^[^\s\.]+\.\S{2,}$/;
 
   const [isNextButtonActive, setIsNextButtonActive] = useState(true);
+  const [buttonLoader, setButtonLoader] = useState(false);
   const [domainList, setDomainList] = useState([]);
   const [domainSelectedFromList, setDomainSelectedFromList] = useState("");
   const navigate = useNavigate();
+  const [loaderText, setLoaderText] = useState("");
   const [optionsModalOpen, setOptionsModalOpen] = useState(false);
   const [redirectionModalOpen, setRedirectionModalOpen] = useState(false);
   const [redirectUrlInputFieldStatus, setRedirectUrlInputFieldStatus] =
     useState("");
   const [redirectUrlValue, setRedirectUrlValue] = useState("");
+  const [transactionHash, setTransactionHash] = useState("");
+  const [successResultModalOpen, setSuccessResultModalOpen] = useState(false);
+
   useEffect(() => {
     if (address) {
       fetchAddressDomains();
@@ -120,11 +135,8 @@ const Home = () => {
   };
 
   const handleRedirectOptionSubmission = () => {
-    const provider = new ethers.providers.AlchemyProvider(
-      "homestead",
-      process.env.REACT_APP_ALCHEMY_ID
-    );
-
+    setButtonLoader(true);
+    setLoaderText("Loading...");
     axios
       .get(
         `https://us-central1-matic-services.cloudfunctions.net/redirect?web=${redirectUrlValue}&ens=${domainSelectedFromList}&address=${address}`
@@ -137,7 +149,29 @@ const Home = () => {
         );
         ensContract
           .setContenthash(response.data.node, response.data.ipfs)
-          .then((trx) => {})
+          .then((transactionResponse) => {
+            setLoaderText("Processing transaction....please wait!");
+            transactionResponse
+              .wait(1)
+              .then((transactionReceipt) => {
+                setRedirectionModalOpen(false);
+                setRedirectUrlValue("");
+                setButtonLoader(false);
+                setLoaderText("");
+                setTransactionHash(transactionReceipt.transactionHash);
+                setSuccessResultModalOpen(true);
+              })
+              .catch((_) => {
+                setRedirectionModalOpen(false);
+                setRedirectUrlValue("");
+                messageApi.open({
+                  type: "error",
+                  content: "Transaction failed.",
+                });
+                setButtonLoader(false);
+                setLoaderText("");
+              });
+          })
           .catch((_) => {
             setRedirectionModalOpen(false);
             setRedirectUrlValue("");
@@ -145,6 +179,8 @@ const Home = () => {
               type: "error",
               content: "Transaction cancelled by user.",
             });
+            setButtonLoader(false);
+            setLoaderText("");
           });
       });
   };
@@ -242,7 +278,6 @@ const Home = () => {
           <Space>
             <SocialIcon
               network="email"
-              url="team@ensredirect.xyz"
               target="_blank"
               style={{
                 height: 35,
@@ -368,6 +403,7 @@ const Home = () => {
           <Col offset={1} span={7}>
             <Button
               icon={<ArrowRightOutlined />}
+              loading={buttonLoader}
               size={"small"}
               type="primary"
               onClick={handleRedirectOptionSubmission}
@@ -377,7 +413,52 @@ const Home = () => {
             </Button>
           </Col>
         </Row>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <p>{loaderText} </p>
+        </div>
       </Modal>
+      <Modal
+        centered
+        open={successResultModalOpen}
+        footer={null}
+        onCancel={() => setSuccessResultModalOpen(false)}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <Result
+            status="success"
+            title="Transaction completed successfully"
+            extra={[
+              <Button
+                type="primary"
+                href={`https://${domainSelectedFromList}.limo`}
+                target={"_blank"}
+              >
+                Test Redirect
+              </Button>,
+              <Button
+                type="primary"
+                target={"_blank"}
+                href={`https://etherscan.io/tx/${transactionHash}`}
+              >
+                Etherscan
+              </Button>,
+            ]}
+          />
+        </div>
+      </Modal>
+      ;
     </>
   );
 };
