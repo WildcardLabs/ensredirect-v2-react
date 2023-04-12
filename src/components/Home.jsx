@@ -477,7 +477,8 @@ const Home = () => {
             >
               <Result
                 status="success"
-                title="Transaction completed successfully"
+                title="Transaction Successful"
+                subTitle="Test redirect by appending ‘’.limo’’ on any browser e.g., ensredirect.eth.limo."
                 extra={[
                   <Button
                     type="primary"
@@ -743,7 +744,8 @@ const Home = () => {
             >
               <Result
                 status="success"
-                title="Transaction completed successfully"
+                title="Transaction Successful"
+                subTitle='Test redirect by appending ".limo" on any browser e.g. ensredirect.eth.limo'
                 extra={[
                   <Button
                     type="primary"

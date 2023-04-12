@@ -25,13 +25,22 @@ const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [optionsModalOpen, setOptionsModalOpen] = useState(false);
+  const [iframeUrl, setIframeUrl] = useState(
+    `https://ensredirect.xyz/profile?ens=${location.state.ensName}`
+  );
 
   useEffect(() => {
     if (!isConnected) {
       setAddress("");
-      navigate(-1);
+      navigate("/home");
     }
   }, [isConnected]);
+
+  const handleFormSubmission = (values) => {
+    setIframeUrl(
+      `https://ensredirect.xyz/profile?ens=${location.state.ensName}&youtube=${values.youtube}&facebook=${values.facebook}&twitch=${values.twitch}&tiktok=${values.tiktok}&spotify=${values.spotify}&apple=${values.apple}`
+    );
+  };
 
   return (
     <>
@@ -71,7 +80,7 @@ const Profile = () => {
                   Profile preview
                 </p>
                 <iframe
-                  src={`https://ensredirect.xyz/profile?ens=${location.state.ensName}`}
+                  src={iframeUrl}
                   frameborder="0"
                   hspace="0"
                   vspace="0"
@@ -93,13 +102,13 @@ const Profile = () => {
                 hoverable={true}
               >
                 <div>
-                  <Form name="form_item_path">
-                    <Form.Item name="YouTubeIcon">
+                  <Form name="form_item_path" onFinish={handleFormSubmission}>
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>YouTube</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="YouTubeLink">
+                    <Form.Item name="youtube">
                       <Input
                         placeholder="Enter your YouTube link"
                         size={"large"}
@@ -116,12 +125,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="FacebookIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>Facebook</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="FacebookLink">
+                    <Form.Item name="facebook">
                       <Input
                         placeholder="Enter your Facebook link"
                         size={"large"}
@@ -138,12 +147,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="TwitchIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>Twitch</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="TwitchLink">
+                    <Form.Item name="twitch">
                       <Input
                         placeholder="Enter your Twitch link"
                         size={"large"}
@@ -160,12 +169,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="TikTokIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>TikTok</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="TikTokLink">
+                    <Form.Item name="tiktok">
                       <Input
                         placeholder="Enter your TikTok link"
                         size={"large"}
@@ -182,12 +191,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="SpotifyIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>Spotify Podcast</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="SpotifyLink">
+                    <Form.Item name="spotify">
                       <Input
                         placeholder="Enter your Spotify podcast link"
                         size={"large"}
@@ -204,12 +213,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="VimeoIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>Vimeo</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="VimeoLink">
+                    <Form.Item name="vimeo">
                       <Input
                         placeholder="Enter your Vimeo link"
                         size={"large"}
@@ -226,12 +235,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="AppleIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>Apple Podcast</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="AppleLink">
+                    <Form.Item name="apple">
                       <Input
                         placeholder="Enter your Apple podcast link"
                         size={"large"}
@@ -246,33 +255,33 @@ const Profile = () => {
                         }
                       />
                     </Form.Item>
+                    {loading ? (
+                      <Spin />
+                    ) : (
+                      <Row
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-evenly",
+                          margin: "10px",
+                          marginBottom: "30px",
+                        }}
+                      >
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          size={"large"}
+                          onClick={() => setOptionsModalOpen(true)}
+                          style={{
+                            display: "flex",
+                          }}
+                        >
+                          Confirm profile
+                        </Button>
+                      </Row>
+                    )}
                   </Form>
                 </div>
-                {loading ? (
-                  <Spin />
-                ) : (
-                  <Row
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-evenly",
-                      margin: "10px",
-                      marginBottom: "30px",
-                    }}
-                  >
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      size={"large"}
-                      onClick={() => setOptionsModalOpen(true)}
-                      style={{
-                        display: "flex",
-                      }}
-                    >
-                      Confirm profile
-                    </Button>
-                  </Row>
-                )}
               </Card>
             </Col>
           </Row>
@@ -314,7 +323,7 @@ const Profile = () => {
                   Profile preview
                 </p>
                 <iframe
-                  src="https://wildcards.wtf/page/"
+                  src={iframeUrl}
                   frameborder="0"
                   hspace="0"
                   vspace="0"
@@ -332,13 +341,13 @@ const Profile = () => {
                 hoverable={true}
               >
                 <div>
-                  <Form name="form_item_path">
-                    <Form.Item name="YouTubeIcon">
+                  <Form name="form_item_path" onFinish={handleFormSubmission}>
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>YouTube</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="YouTubeLink">
+                    <Form.Item name="youtube">
                       <Input
                         placeholder="Enter your YouTube link"
                         size={"large"}
@@ -355,12 +364,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="FacebookIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>Facebook</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="FacebookLink">
+                    <Form.Item name="facebook">
                       <Input
                         placeholder="Enter your Facebook link"
                         size={"large"}
@@ -377,12 +386,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="TwitchIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>Twitch</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="TwitchLink">
+                    <Form.Item name="twitch">
                       <Input
                         placeholder="Enter your Twitch link"
                         size={"large"}
@@ -399,12 +408,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="TikTokIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>TikTok</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="TikTokLink">
+                    <Form.Item name="tiktok">
                       <Input
                         placeholder="Enter your TikTok link"
                         size={"large"}
@@ -421,12 +430,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="SpotifyIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>Spotify Podcast</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="SpotifyLink">
+                    <Form.Item name="spotify">
                       <Input
                         placeholder="Enter your Spotify podcast link"
                         size={"large"}
@@ -443,12 +452,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="VimeoIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>Vimeo</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="VimeoLink">
+                    <Form.Item name="vimeo">
                       <Input
                         placeholder="Enter your Vimeo link"
                         size={"large"}
@@ -465,12 +474,12 @@ const Profile = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item name="AppleIcon">
+                    <Form.Item>
                       <Divider orientation="left" plain>
                         <b>Apple Podcast</b>
                       </Divider>
                     </Form.Item>
-                    <Form.Item name="AppleLink">
+                    <Form.Item name="apple">
                       <Input
                         placeholder="Enter your Apple podcast link"
                         size={"large"}
@@ -485,33 +494,33 @@ const Profile = () => {
                         }
                       />
                     </Form.Item>
+                    {loading ? (
+                      <Spin />
+                    ) : (
+                      <Row
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-evenly",
+                          margin: "10px",
+                          marginBottom: "30px",
+                        }}
+                      >
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          size={"large"}
+                          onClick={() => setOptionsModalOpen(true)}
+                          style={{
+                            display: "flex",
+                          }}
+                        >
+                          Confirm profile
+                        </Button>
+                      </Row>
+                    )}
                   </Form>
                 </div>
-                {loading ? (
-                  <Spin />
-                ) : (
-                  <Row
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-evenly",
-                      margin: "10px",
-                      marginBottom: "30px",
-                    }}
-                  >
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      size={"large"}
-                      onClick={() => setOptionsModalOpen(true)}
-                      style={{
-                        display: "flex",
-                      }}
-                    >
-                      Confirm profile
-                    </Button>
-                  </Row>
-                )}
               </Card>
             </Col>
           </Row>
