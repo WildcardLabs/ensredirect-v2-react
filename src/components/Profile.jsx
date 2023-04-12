@@ -86,7 +86,7 @@ const Profile = () => {
                   vspace="0"
                   marginheight="0"
                   marginwidth="0"
-                  height="970px"
+                  height="820px"
                   width="100%"
                 />
               </Card>
@@ -215,28 +215,6 @@ const Profile = () => {
 
                     <Form.Item>
                       <Divider orientation="left" plain>
-                        <b>Vimeo</b>
-                      </Divider>
-                    </Form.Item>
-                    <Form.Item name="vimeo">
-                      <Input
-                        placeholder="Enter your Vimeo link"
-                        size={"large"}
-                        prefix={
-                          <SocialIcon
-                            network="vimeo"
-                            style={{
-                              height: 25,
-                              width: 25,
-                              marginRight: 10,
-                            }}
-                          />
-                        }
-                      />
-                    </Form.Item>
-
-                    <Form.Item>
-                      <Divider orientation="left" plain>
                         <b>Apple Podcast</b>
                       </Divider>
                     </Form.Item>
@@ -309,7 +287,7 @@ const Profile = () => {
                 style={{
                   marginTop: 50,
                   backgroundColor: "#f8f8f8",
-                  height: "123vh",
+                  height: "100vh",
                 }}
                 hoverable={true}
               >
@@ -329,7 +307,7 @@ const Profile = () => {
                   vspace="0"
                   marginheight="0"
                   marginwidth="0"
-                  height="970px"
+                  height="820px"
                   width="100%"
                 />
               </Card>
@@ -337,7 +315,11 @@ const Profile = () => {
             <Col offset={2} span={11}>
               <Card
                 bordered={false}
-                style={{ marginTop: 50, backgroundColor: "#f8f8f8" }}
+                style={{
+                  marginTop: 50,
+                  backgroundColor: "#f8f8f8",
+                  height: "100vh",
+                }}
                 hoverable={true}
               >
                 <div>
@@ -442,28 +424,6 @@ const Profile = () => {
                         prefix={
                           <SocialIcon
                             network="spotify"
-                            style={{
-                              height: 25,
-                              width: 25,
-                              marginRight: 10,
-                            }}
-                          />
-                        }
-                      />
-                    </Form.Item>
-
-                    <Form.Item>
-                      <Divider orientation="left" plain>
-                        <b>Vimeo</b>
-                      </Divider>
-                    </Form.Item>
-                    <Form.Item name="vimeo">
-                      <Input
-                        placeholder="Enter your Vimeo link"
-                        size={"large"}
-                        prefix={
-                          <SocialIcon
-                            network="vimeo"
                             style={{
                               height: 25,
                               width: 25,
