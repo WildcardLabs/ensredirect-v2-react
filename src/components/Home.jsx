@@ -225,7 +225,15 @@ const Home = () => {
   }
 
   return (
-    <>
+    <div
+      style={{
+        backgroundColor: "white",
+        margin: 50,
+        padding: 70,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       {contextHolder}
       <Header />
       <h1>Add utility to your ENS name</h1>
@@ -460,8 +468,7 @@ const Home = () => {
           />
         </div>
       </Modal>
-      ;
-    </>
+    </div>
   );
 };
 

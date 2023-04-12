@@ -40,12 +40,12 @@
 h1 {
   margin-bottom: 24px;
   font-weight: 900;
-  font-size: 60px;
+  font-size: 45px;
   line-height: 59px;
   text-align: center;
   letter-spacing: -0.055em;
   color: #1b1b1b;
-  margin-top: 150px;
+  margin-top: 50px;
 }
 
 p.subtitle {
@@ -79,4 +79,7 @@ p.subtitle {
 
 body {
   font-family: Circular, sans-serif;
+  background-image: url("bg.png");
+  height: "100vh";
+  width: "100vw";
 }

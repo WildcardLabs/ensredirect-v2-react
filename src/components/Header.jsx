@@ -30,7 +30,7 @@ const Header = () => {
     useContext(ActiveStateContext);
   return (
     <>
-      <Row justify="center" style={{ marginTop: "30px" }}>
+      <Row justify="center" style={{ padding: "20px" }}>
         <Col span={8} type="flex" align="middle">
           <div onClick={() => navigate("/")}>
             <Image src={logo} height={36} width={36} preview={false}></Image>
