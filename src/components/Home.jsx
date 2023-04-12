@@ -18,6 +18,7 @@ import {
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import ActiveStateContext from "./Context";
+import "../App.css";
 
 const Home = () => {
   const { address, signer } = useContext(ActiveStateContext);
@@ -28,7 +29,7 @@ const Home = () => {
   const protocolAndDomainRE = /^(?:\w+:)?\/\/(\S+)$/;
   const localhostDomainRE = /^localhost[\:?\d]*(?:[^\:?\d]\S*)?$/;
   const nonLocalhostDomainRE = /^[^\s\.]+\.\S{2,}$/;
-
+  const isMobile = window.innerWidth <= 400;
   const [isNextButtonActive, setIsNextButtonActive] = useState(true);
   const [buttonLoader, setButtonLoader] = useState(false);
   const [domainList, setDomainList] = useState([]);
@@ -192,7 +193,11 @@ const Home = () => {
   };
 
   const navigateToProfilePage = () => {
-    navigate("/profile");
+    navigate("/profile", {
+      state: {
+        ensName: domainSelectedFromList,
+      },
+    });
   };
 
   const showOptionSelectionModal = () => {
@@ -225,107 +230,29 @@ const Home = () => {
   }
 
   return (
-    <div
-      style={{
-        backgroundColor: "white",
-        margin: 50,
-        padding: 70,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {contextHolder}
-      <Header />
-      <h1>Add utility to your ENS name</h1>
-      <p className="subtitle">
-        {" "}
-        Maximize Your web3 presence with your ENS domain!
-      </p>
-      <p
-        className="subtitle"
-        style={{ margin: "30px", marginLeft: "200px", marginRight: "200px" }}
-      >
-        Add utility to your .eth domain with ENSRedirect! Curate and showcase
-        your web3 profile by seamlessly integrating videos and podcasts from
-        your favorite social platforms, or easily redirect your domain to any
-        website of your choice – all for free.
-      </p>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
+    <>
+      {isMobile ? (
         <div
           style={{
-            marginTop: "20px",
-            marginLeft: "30px",
-          }}
-        >
-          {domainSelectionComponent()}
-        </div>
-
-        <div
-          style={{
+            backgroundColor: "white",
+            margin: 10,
+            padding: 20,
             display: "flex",
-            alignItems: "center",
-            marginTop: "20px",
             flexDirection: "column",
           }}
         >
-          <p
-            style={{
-              marginLeft: address ? 0 : 34,
-              fontSize: 21,
-              fontWeight: "bold",
-            }}
-          >
-            Get in touch
+          {contextHolder}
+          <Header />
+          <h1>Add utility to your ENS name</h1>
+          <p className="subtitle">
+            Maximize Your web3 presence with your ENS domain!
           </p>
-          <Space>
-            <SocialIcon
-              network="email"
-              target="_blank"
-              style={{
-                height: 35,
-                width: 35,
-                marginLeft: address ? 0 : 30,
-              }}
-            />
-            <p>team@ensredirect.xyz</p>
-            <SocialIcon
-              network="twitter"
-              url="https://twitter.com/ensredirect"
-              target="_blank"
-              style={{
-                height: 35,
-                width: 35,
-              }}
-            />
-            <p>@ensredirect</p>
-            <SocialIcon
-              network="github"
-              url="https://github.com/ENS-Redirect/ensredirect-v2-react"
-              target="_blank"
-              style={{
-                height: 35,
-                width: 35,
-              }}
-            />
-            <p>Github</p>
-          </Space>
-        </div>
-      </div>
-      <Modal
-        centered
-        footer={null}
-        title={"Select option to proceed:"}
-        open={optionsModalOpen}
-        onOk={() => setOptionsModalOpen(false)}
-        onCancel={() => setOptionsModalOpen(false)}
-      >
-        <Space direction="vertical">
+          <p className="subtitle">
+            Add utility to your .eth domain with ENSRedirect! Curate and
+            showcase your web3 profile by seamlessly integrating videos and
+            podcasts from your favorite social platforms, or easily redirect
+            your domain to any website of your choice – all for free.
+          </p>
           <div
             style={{
               display: "flex",
@@ -333,142 +260,512 @@ const Home = () => {
               flexDirection: "column",
             }}
           >
-            <Button
-              disabled={isNextButtonActive}
-              icon={<ArrowRightOutlined />}
-              onClick={handleRedirectClick}
-              size={"large"}
-              type="primary"
+            <div
               style={{
-                margin: "20px",
-                alignSelf: "center",
-                width: "350px",
-                textAlign: "left",
+                marginTop: "20px",
+                marginLeft: "30px",
               }}
             >
-              Redirect to any website
-            </Button>
-            <Button
-              disabled={isNextButtonActive}
-              icon={<ArrowRightOutlined />}
-              onClick={navigateToProfilePage}
-              size={"large"}
-              type="primary"
-              style={{
-                marginBottom: "20px",
-                alignSelf: "center",
-                width: "350px",
-                textAlign: "left",
-              }}
-            >
-              Generate your web3 profile
-            </Button>
-          </div>
-        </Space>
-      </Modal>
-      <Modal
-        centered
-        open={redirectionModalOpen}
-        footer={null}
-        onCancel={() => setRedirectionModalOpen(false)}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
-          <p>
-            Redirect <b>{domainSelectedFromList}</b> to{" "}
-          </p>
-        </div>
+              {domainSelectionComponent()}
+            </div>
 
-        <Row
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-evenly",
-            margin: "10px",
-            marginBottom: "30px",
-          }}
-        >
-          <Col span={16}>
-            <Input
-              style={{ height: "40px" }}
-              placeholder="Enter website url to redirect to"
-              status={redirectUrlInputFieldStatus}
-              value={redirectUrlValue}
-              onChange={(e) => {
-                const url = e.target.value;
-                setRedirectUrlValue(url);
-                if (url !== "" && !isUrl(url)) {
-                  setRedirectUrlInputFieldStatus("error");
-                } else {
-                  setRedirectUrlInputFieldStatus("");
-                }
+            <>
+              <p
+                style={{
+                  marginLeft: address ? 0 : 34,
+                  fontSize: 21,
+                  fontWeight: "bold",
+                }}
+              >
+                Get in touch
+              </p>
+            </>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
               }}
-            />
-          </Col>
-          <Col offset={1} span={7}>
-            <Button
-              icon={<ArrowRightOutlined />}
-              loading={buttonLoader}
-              size={"small"}
-              type="primary"
-              onClick={handleRedirectOptionSubmission}
-              style={{ height: "40px" }}
             >
-              Redirect
-            </Button>
-          </Col>
-        </Row>
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
+                <SocialIcon
+                  network="email"
+                  target="_blank"
+                  style={{
+                    height: 35,
+                    width: 35,
+                    marginRight: 5,
+                    marginLeft: 10,
+                    marginTop: 10,
+                  }}
+                />
+                <p>team@ensredirect.xyz</p>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
+                <SocialIcon
+                  network="twitter"
+                  url="https://twitter.com/ensredirect"
+                  target="_blank"
+                  style={{
+                    height: 35,
+                    width: 35,
+                    marginRight: 5,
+                    marginLeft: 10,
+                    marginTop: 10,
+                  }}
+                />
+                <p>@ensredirect</p>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
+                <SocialIcon
+                  network="github"
+                  url="https://github.com/ENS-Redirect/ensredirect-v2-react"
+                  target="_blank"
+                  style={{
+                    height: 35,
+                    width: 35,
+                    marginRight: 5,
+                    marginLeft: 10,
+                    marginTop: 10,
+                  }}
+                />
+                <p>Github</p>
+              </div>
+            </div>
+          </div>
+          <Modal
+            centered
+            footer={null}
+            title={"Select option to proceed:"}
+            open={optionsModalOpen}
+            onOk={() => setOptionsModalOpen(false)}
+            onCancel={() => setOptionsModalOpen(false)}
+          >
+            <Space direction="vertical">
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <Button
+                  disabled={isNextButtonActive}
+                  icon={<ArrowRightOutlined />}
+                  onClick={handleRedirectClick}
+                  size={"large"}
+                  type="primary"
+                  style={{
+                    margin: "20px",
+                    alignSelf: "center",
+                    width: "250px",
+                    textAlign: "left",
+                  }}
+                >
+                  Redirect to any website
+                </Button>
+                <Button
+                  disabled={isNextButtonActive}
+                  icon={<ArrowRightOutlined />}
+                  onClick={navigateToProfilePage}
+                  size={"large"}
+                  type="primary"
+                  style={{
+                    marginBottom: "20px",
+                    alignSelf: "center",
+                    width: "250px",
+                    textAlign: "left",
+                  }}
+                >
+                  Generate your web3 profile
+                </Button>
+              </div>
+            </Space>
+          </Modal>
+          <Modal
+            centered
+            open={redirectionModalOpen}
+            footer={null}
+            onCancel={() => setRedirectionModalOpen(false)}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <p>
+                Redirect <b>{domainSelectedFromList}</b> to{" "}
+              </p>
+            </div>
+
+            <Row
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                margin: "10px",
+                marginBottom: "30px",
+              }}
+            >
+              <Col span={16}>
+                <Input
+                  style={{ height: "40px" }}
+                  placeholder="Enter website url to redirect to"
+                  status={redirectUrlInputFieldStatus}
+                  value={redirectUrlValue}
+                  onChange={(e) => {
+                    const url = e.target.value;
+                    setRedirectUrlValue(url);
+                    if (url !== "" && !isUrl(url)) {
+                      setRedirectUrlInputFieldStatus("error");
+                    } else {
+                      setRedirectUrlInputFieldStatus("");
+                    }
+                  }}
+                />
+              </Col>
+              <Col offset={1} span={7}>
+                <Button
+                  icon={<ArrowRightOutlined />}
+                  loading={buttonLoader}
+                  size={"small"}
+                  type="primary"
+                  onClick={handleRedirectOptionSubmission}
+                  style={{ height: "40px" }}
+                >
+                  Redirect
+                </Button>
+              </Col>
+            </Row>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <p>{loaderText} </p>
+            </div>
+          </Modal>
+          <Modal
+            centered
+            open={successResultModalOpen}
+            footer={null}
+            onCancel={() => setSuccessResultModalOpen(false)}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <Result
+                status="success"
+                title="Transaction completed successfully"
+                extra={[
+                  <Button
+                    type="primary"
+                    href={`https://${domainSelectedFromList}.limo`}
+                    target={"_blank"}
+                  >
+                    Test Redirect
+                  </Button>,
+                  <Button
+                    type="primary"
+                    target={"_blank"}
+                    href={`https://etherscan.io/tx/${transactionHash}`}
+                  >
+                    Etherscan
+                  </Button>,
+                ]}
+              />
+            </div>
+          </Modal>
+        </div>
+      ) : (
         <div
           style={{
+            backgroundColor: "white",
+            margin: 50,
+            padding: 70,
             display: "flex",
-            alignItems: "center",
             flexDirection: "column",
           }}
         >
-          <p>{loaderText} </p>
-        </div>
-      </Modal>
-      <Modal
-        centered
-        open={successResultModalOpen}
-        footer={null}
-        onCancel={() => setSuccessResultModalOpen(false)}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
-          <Result
-            status="success"
-            title="Transaction completed successfully"
-            extra={[
-              <Button
-                type="primary"
-                href={`https://${domainSelectedFromList}.limo`}
-                target={"_blank"}
+          {contextHolder}
+          <Header />
+          <h1>Add utility to your ENS name</h1>
+          <p className="subtitle">
+            Maximize Your web3 presence with your ENS domain!
+          </p>
+          <p className="subtitle">
+            Add utility to your .eth domain with ENSRedirect! Curate and
+            showcase your web3 profile by seamlessly integrating videos and
+            podcasts from your favorite social platforms, or easily redirect
+            your domain to any website of your choice – all for free.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <div
+              style={{
+                marginTop: "20px",
+                marginLeft: "30px",
+              }}
+            >
+              {domainSelectionComponent()}
+            </div>
+
+            <>
+              <p
+                style={{
+                  marginLeft: address ? 0 : 34,
+                  fontSize: 21,
+                  fontWeight: "bold",
+                }}
               >
-                Test Redirect
-              </Button>,
-              <Button
-                type="primary"
-                target={"_blank"}
-                href={`https://etherscan.io/tx/${transactionHash}`}
+                Get in touch
+              </p>
+            </>
+            <div
+              style={{
+                display: "flex",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                }}
               >
-                Etherscan
-              </Button>,
-            ]}
-          />
+                <SocialIcon
+                  network="email"
+                  target="_blank"
+                  style={{
+                    height: 35,
+                    width: 35,
+                    marginRight: 5,
+                    marginLeft: 10,
+                    marginTop: 10,
+                  }}
+                />
+                <p>team@ensredirect.xyz</p>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
+                <SocialIcon
+                  network="twitter"
+                  url="https://twitter.com/ensredirect"
+                  target="_blank"
+                  style={{
+                    height: 35,
+                    width: 35,
+                    marginRight: 5,
+                    marginLeft: 10,
+                    marginTop: 10,
+                  }}
+                />
+                <p>@ensredirect</p>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
+                <SocialIcon
+                  network="github"
+                  url="https://github.com/ENS-Redirect/ensredirect-v2-react"
+                  target="_blank"
+                  style={{
+                    height: 35,
+                    width: 35,
+                    marginRight: 5,
+                    marginLeft: 10,
+                    marginTop: 10,
+                  }}
+                />
+                <p>Github</p>
+              </div>
+            </div>
+          </div>
+          <Modal
+            centered
+            footer={null}
+            title={"Select option to proceed:"}
+            open={optionsModalOpen}
+            onOk={() => setOptionsModalOpen(false)}
+            onCancel={() => setOptionsModalOpen(false)}
+          >
+            <Space direction="vertical">
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <Button
+                  disabled={isNextButtonActive}
+                  icon={<ArrowRightOutlined />}
+                  onClick={handleRedirectClick}
+                  size={"large"}
+                  type="primary"
+                  style={{
+                    margin: "20px",
+                    alignSelf: "center",
+                    width: "250px",
+                    textAlign: "left",
+                  }}
+                >
+                  Redirect to any website
+                </Button>
+                <Button
+                  disabled={isNextButtonActive}
+                  icon={<ArrowRightOutlined />}
+                  onClick={navigateToProfilePage}
+                  size={"large"}
+                  type="primary"
+                  style={{
+                    marginBottom: "20px",
+                    alignSelf: "center",
+                    width: "250px",
+                    textAlign: "left",
+                  }}
+                >
+                  Generate your web3 profile
+                </Button>
+              </div>
+            </Space>
+          </Modal>
+          <Modal
+            centered
+            open={redirectionModalOpen}
+            footer={null}
+            onCancel={() => setRedirectionModalOpen(false)}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <p>
+                Redirect <b>{domainSelectedFromList}</b> to{" "}
+              </p>
+            </div>
+
+            <Row
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                margin: "10px",
+                marginBottom: "30px",
+              }}
+            >
+              <Col span={16}>
+                <Input
+                  style={{ height: "40px" }}
+                  placeholder="Enter website url to redirect to"
+                  status={redirectUrlInputFieldStatus}
+                  value={redirectUrlValue}
+                  onChange={(e) => {
+                    const url = e.target.value;
+                    setRedirectUrlValue(url);
+                    if (url !== "" && !isUrl(url)) {
+                      setRedirectUrlInputFieldStatus("error");
+                    } else {
+                      setRedirectUrlInputFieldStatus("");
+                    }
+                  }}
+                />
+              </Col>
+              <Col offset={1} span={7}>
+                <Button
+                  icon={<ArrowRightOutlined />}
+                  loading={buttonLoader}
+                  size={"small"}
+                  type="primary"
+                  onClick={handleRedirectOptionSubmission}
+                  style={{ height: "40px" }}
+                >
+                  Redirect
+                </Button>
+              </Col>
+            </Row>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <p>{loaderText} </p>
+            </div>
+          </Modal>
+          <Modal
+            centered
+            open={successResultModalOpen}
+            footer={null}
+            onCancel={() => setSuccessResultModalOpen(false)}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <Result
+                status="success"
+                title="Transaction completed successfully"
+                extra={[
+                  <Button
+                    type="primary"
+                    href={`https://${domainSelectedFromList}.limo`}
+                    target={"_blank"}
+                  >
+                    Test Redirect
+                  </Button>,
+                  <Button
+                    type="primary"
+                    target={"_blank"}
+                    href={`https://etherscan.io/tx/${transactionHash}`}
+                  >
+                    Etherscan
+                  </Button>,
+                ]}
+              />
+            </div>
+          </Modal>
         </div>
-      </Modal>
-    </div>
+      )}
+    </>
   );
 };
 

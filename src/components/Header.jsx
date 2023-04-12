@@ -33,11 +33,22 @@ const Header = () => {
       <Row justify="center" style={{ padding: "20px" }}>
         <Col span={8} type="flex" align="middle">
           <div onClick={() => navigate("/")}>
-            <Image src={logo} height={36} width={36} preview={false}></Image>
+            <Image
+              src={logo}
+              style={{ height: 36, width: 36 }}
+              preview={false}
+            ></Image>
           </div>
         </Col>
         <Col span={5} offset={11} type="flex" align="middle">
-          <ConnectButton showBalance={false} chainStatus={"none"} />
+          <ConnectButton
+            showBalance={false}
+            chainStatus={"none"}
+            accountStatus={{
+              smallScreen: "avatar",
+              largeScreen: "full",
+            }}
+          />
         </Col>
       </Row>
     </>
