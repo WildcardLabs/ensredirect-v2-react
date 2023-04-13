@@ -543,6 +543,7 @@ const Home = () => {
                   marginLeft: address ? 0 : 34,
                   fontSize: 21,
                   fontWeight: "bold",
+                  marginTop: 80,
                 }}
               >
                 Get in touch

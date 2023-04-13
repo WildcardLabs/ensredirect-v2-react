@@ -1,4 +1,5 @@
 import Header from "./Header";
+import { ethers } from "ethers";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -7,9 +8,10 @@ import {
   Divider,
   Form,
   Input,
-  Modal,
+  Result,
   Row,
-  Space,
+  message,
+  Modal,
   Spin,
 } from "antd";
 import { FaPodcast } from "react-icons/fa";
@@ -17,9 +19,14 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SocialIcon } from "react-social-icons";
 import ActiveStateContext from "./Context";
+import axios from "axios";
 
 const Profile = () => {
-  const { isConnected, setAddress } = useContext(ActiveStateContext);
+  const [buttonLoader, setButtonLoader] = useState(false);
+  const domainabi = [
+    "function setContenthash(bytes32 node, bytes calldata hash)",
+  ];
+  const { isConnected, setAddress, signer } = useContext(ActiveStateContext);
   const isMobile = window.innerWidth <= 400;
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -28,6 +35,9 @@ const Profile = () => {
   const [iframeUrl, setIframeUrl] = useState(
     `https://ensredirect.xyz/profile?ens=${location.state.ensName}`
   );
+  const [messageApi, contextHolder] = message.useMessage();
+  const [successResultModalOpen, setSuccessResultModalOpen] = useState(false);
+  const [transactionHash, setTransactionHash] = useState("");
 
   useEffect(() => {
     if (!isConnected) {
@@ -37,9 +47,50 @@ const Profile = () => {
   }, [isConnected]);
 
   const handleFormSubmission = (values) => {
+    submitProfile(values);
     setIframeUrl(
       `https://ensredirect.xyz/profile?ens=${location.state.ensName}&youtube=${values.youtube}&facebook=${values.facebook}&twitch=${values.twitch}&tiktok=${values.tiktok}&spotify=${values.spotify}&apple=${values.apple}`
     );
+  };
+
+  const submitProfile = (values) => {
+    setButtonLoader(true);
+    axios
+      .get(
+        `https://us-central1-matic-services.cloudfunctions.net/ensprofile?ens=${location.state.ensName}&youtube=${values.youtube}&facebook=${values.facebook}&twitch=${values.twitch}&tiktok=${values.tiktok}&spotify=${values.spotify}&apple=${values.apple}`
+      )
+      .then((response) => {
+        const ensContract = new ethers.Contract(
+          response.data.resolver,
+          domainabi,
+          signer
+        );
+        ensContract
+          .setContenthash(response.data.node, response.data.ipfs)
+          .then((transactionResponse) => {
+            transactionResponse
+              .wait(1)
+              .then((transactionReceipt) => {
+                setButtonLoader(false);
+                setSuccessResultModalOpen(true);
+                setTransactionHash(transactionReceipt.transactionHash);
+              })
+              .catch((_) => {
+                messageApi.open({
+                  type: "error",
+                  content: "Transaction failed.",
+                });
+                setButtonLoader(false);
+              });
+          })
+          .catch((_) => {
+            messageApi.open({
+              type: "error",
+              content: "Transaction cancelled by user.",
+            });
+            setButtonLoader(false);
+          });
+      });
   };
 
   return (
@@ -54,6 +105,7 @@ const Profile = () => {
             flexDirection: "column",
           }}
         >
+          {contextHolder}
           <Header />
           <Row
             style={{
@@ -86,7 +138,7 @@ const Profile = () => {
                   vspace="0"
                   marginheight="0"
                   marginwidth="0"
-                  height="820px"
+                  height="970px"
                   width="100%"
                 />
               </Card>
@@ -154,7 +206,7 @@ const Profile = () => {
                     </Form.Item>
                     <Form.Item name="twitch">
                       <Input
-                        placeholder="Enter your Twitch link"
+                        placeholder="Enter your Twitch channel name"
                         size={"large"}
                         prefix={
                           <SocialIcon
@@ -246,6 +298,7 @@ const Profile = () => {
                         }}
                       >
                         <Button
+                          loading={buttonLoader}
                           type="primary"
                           htmlType="submit"
                           size={"large"}
@@ -263,6 +316,42 @@ const Profile = () => {
               </Card>
             </Col>
           </Row>
+          <Modal
+            centered
+            open={successResultModalOpen}
+            footer={null}
+            onCancel={() => setSuccessResultModalOpen(false)}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <Result
+                status="success"
+                title="Transaction Successful"
+                subTitle='View your Web3 profile by appending ".limo" on any browser e.g. ensredirect.eth.limo'
+                extra={[
+                  <Button
+                    type="primary"
+                    href={`https://${location.state.ensName}.limo`}
+                    target={"_blank"}
+                  >
+                    Test Redirect
+                  </Button>,
+                  <Button
+                    type="primary"
+                    target={"_blank"}
+                    href={`https://etherscan.io/tx/${transactionHash}`}
+                  >
+                    Etherscan
+                  </Button>,
+                ]}
+              />
+            </div>
+          </Modal>
         </div>
       ) : (
         <div
@@ -274,6 +363,7 @@ const Profile = () => {
             flexDirection: "column",
           }}
         >
+          {contextHolder}
           <Header />
           <Row
             style={{
@@ -287,7 +377,7 @@ const Profile = () => {
                 style={{
                   marginTop: 50,
                   backgroundColor: "#f8f8f8",
-                  height: "100vh",
+                  height: "104vh",
                 }}
                 hoverable={true}
               >
@@ -307,8 +397,11 @@ const Profile = () => {
                   vspace="0"
                   marginheight="0"
                   marginwidth="0"
-                  height="820px"
-                  width="100%"
+                  style={{
+                    minHeight: "600px",
+                    maxHeight: "950px",
+                    width: "100%",
+                  }}
                 />
               </Card>
             </Col>
@@ -318,7 +411,6 @@ const Profile = () => {
                 style={{
                   marginTop: 50,
                   backgroundColor: "#f8f8f8",
-                  height: "100vh",
                 }}
                 hoverable={true}
               >
@@ -375,7 +467,7 @@ const Profile = () => {
                     </Form.Item>
                     <Form.Item name="twitch">
                       <Input
-                        placeholder="Enter your Twitch link"
+                        placeholder="Enter your Twitch channel name"
                         size={"large"}
                         prefix={
                           <SocialIcon
@@ -467,6 +559,7 @@ const Profile = () => {
                         }}
                       >
                         <Button
+                          loading={buttonLoader}
                           type="primary"
                           htmlType="submit"
                           size={"large"}
@@ -484,6 +577,42 @@ const Profile = () => {
               </Card>
             </Col>
           </Row>
+          <Modal
+            centered
+            open={successResultModalOpen}
+            footer={null}
+            onCancel={() => setSuccessResultModalOpen(false)}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <Result
+                status="success"
+                title="Transaction Successful"
+                subTitle='View your Web3 profile by appending ".limo" on any browser e.g. ensredirect.eth.limo'
+                extra={[
+                  <Button
+                    type="primary"
+                    href={`https://${location.state.ensName}.limo`}
+                    target={"_blank"}
+                  >
+                    Test Redirect
+                  </Button>,
+                  <Button
+                    type="primary"
+                    target={"_blank"}
+                    href={`https://etherscan.io/tx/${transactionHash}`}
+                  >
+                    Etherscan
+                  </Button>,
+                ]}
+              />
+            </div>
+          </Modal>
         </div>
       )}
     </>
