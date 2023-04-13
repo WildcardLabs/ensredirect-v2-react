@@ -293,6 +293,7 @@ const Home = () => {
               >
                 <SocialIcon
                   network="email"
+                  url="mailto:team@ensredirect.xyz"
                   target="_blank"
                   style={{
                     height: 35,
