@@ -7,6 +7,9 @@ import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import Profile from "./components/Profile";
+import ActiveStateContext from "./components/Context";
+import { useState } from "react";
 
 const { chains, provider } = configureChains(
   [mainnet, polygon, optimism, arbitrum],
@@ -27,19 +30,34 @@ const wagmiClient = createClient({
   provider,
 });
 
-function App() {
+const App = () => {
+  const [address, setAddress] = useState("");
+  const [isConnected, setIsConnected] = useState(null);
+  const [signer, setSigner] = useState({});
+  const context = {
+    isConnected,
+    setIsConnected,
+    address,
+    setAddress,
+    signer,
+    setSigner,
+  };
+
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/*" element={<Navigate to="/" />} />
-          </Routes>
-        </BrowserRouter>
+        <ActiveStateContext.Provider value={context}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/*" element={<Navigate to="/" />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+          </BrowserRouter>
+        </ActiveStateContext.Provider>
       </RainbowKitProvider>
     </WagmiConfig>
   );
-}
+};
 
 export default App;

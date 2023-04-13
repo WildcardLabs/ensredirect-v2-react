@@ -39,13 +39,13 @@
 
 h1 {
   margin-bottom: 24px;
-  font-weight: 500;
-  font-size: 56px;
+  font-weight: 900;
+  font-size: 45px;
   line-height: 59px;
   text-align: center;
   letter-spacing: -0.055em;
   color: #1b1b1b;
-  margin-top: 150px;
+  margin-top: 50px;
 }
 
 p.subtitle {
@@ -61,4 +61,45 @@ p.subtitle {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@font-face {
+  font-family: Circular;
+  src: url("/src/fonts/CircularStd-Book_grayscale.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Circular-medium;
+  src: url("/src/fonts/CircularStd-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+
+body {
+  font-family: Circular, sans-serif;
+  background-image: url("bg.png");
+  height: "100vh";
+  width: "100vw";
+}
+
+@media only screen and (max-width: 400px) {
+  h1 {
+    margin-bottom: 24px;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 59px;
+    text-align: center;
+    color: #1b1b1b;
+    margin-top: 10px;
+  }
+
+  p.subtitle {
+    font-size: 17px;
+    line-height: 150%;
+    letter-spacing: -0.0225em;
+    text-align: center;
+    color: #444;
+  }
 }
