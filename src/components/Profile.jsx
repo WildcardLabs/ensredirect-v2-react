@@ -33,7 +33,7 @@ const Profile = () => {
   const location = useLocation();
   const [optionsModalOpen, setOptionsModalOpen] = useState(false);
   const [iframeUrl, setIframeUrl] = useState(
-    `https://ensredirect.xyz/profile?ens=${location.state.ensName}`
+    `https://storage.googleapis.com/ensredirect/profile.html?ens=${location.state.ensName}`
   );
   const [messageApi, contextHolder] = message.useMessage();
   const [successResultModalOpen, setSuccessResultModalOpen] = useState(false);
@@ -94,7 +94,7 @@ const Profile = () => {
       .catch((_) => {
             messageApi.open({
               type: "error",
-              content: "Transaction cancelled by user.",
+              content: "Set ENS Resolver on your domain & try again.",
             });
             setButtonLoader(false);
       });
