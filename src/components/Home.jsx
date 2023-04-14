@@ -252,10 +252,10 @@ const Home = () => {
           <Header />
           <h1>Add utility to your ENS name</h1>
           <p className="subtitle">
-            Maximize Your web3 presence with your ENS domain!
+            Maximize your web3 presence with your ENS domain
           </p>
           <p className="subtitle">
-            Add utility to your .eth domain with ENSRedirect! Curate and
+            Add utility to your .eth domain with ENSRedirect. Curate and
             showcase your web3 profile by seamlessly integrating videos and
             podcasts from your favorite social platforms, or easily redirect
             your domain to any website of your choice – all for free.
@@ -521,10 +521,10 @@ const Home = () => {
           <Header />
           <h1>Add utility to your ENS name</h1>
           <p className="subtitle">
-            Maximize Your web3 presence with your ENS domain!
+            Maximize your web3 presence with your ENS domain
           </p>
           <p className="subtitle">
-            Add utility to your .eth domain with ENSRedirect! Curate and
+            Add utility to your .eth domain with ENSRedirect. Curate and
             showcase your web3 profile by seamlessly integrating videos and
             podcasts from your favorite social platforms, or easily redirect
             your domain to any website of your choice – all for free.
