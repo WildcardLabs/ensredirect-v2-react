@@ -183,7 +183,7 @@ const Home = () => {
             setButtonLoader(false);
             setLoaderText("");
           });
-      });
+      })
       .catch((_) => {
             messageApi.open({
               type: "error",
