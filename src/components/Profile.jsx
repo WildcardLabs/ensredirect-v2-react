@@ -33,7 +33,7 @@ const Profile = () => {
   const location = useLocation();
   const [optionsModalOpen, setOptionsModalOpen] = useState(false);
   const [iframeUrl, setIframeUrl] = useState(
-    `https://ensredirect.xyz/profile?ens=${location.state.ensName}`
+    `https://storage.googleapis.com/ensredirect/profile.html?ens=${location.state.ensName}`
   );
   const [messageApi, contextHolder] = message.useMessage();
   const [successResultModalOpen, setSuccessResultModalOpen] = useState(false);
