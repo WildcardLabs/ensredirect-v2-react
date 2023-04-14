@@ -49,7 +49,7 @@ const Profile = () => {
   const handleFormSubmission = (values) => {
     submitProfile(values);
     setIframeUrl(
-      `https://ensredirect.xyz/profile?ens=${location.state.ensName}&youtube=${values.youtube}&facebook=${values.facebook}&twitch=${values.twitch}&tiktok=${values.tiktok}&spotify=${values.spotify}&apple=${values.apple}`
+      `https://storage.googleapis.com/ensredirect/profile.html?ens=${location.state.ensName}&youtube=${values.youtube}&facebook=${values.facebook}&twitch=${values.twitch}&tiktok=${values.tiktok}&spotify=${values.spotify}&apple=${values.apple}`
     );
   };
 
