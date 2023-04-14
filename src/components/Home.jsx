@@ -184,6 +184,13 @@ const Home = () => {
             setLoaderText("");
           });
       });
+      .catch((_) => {
+            messageApi.open({
+              type: "error",
+              content: "Set ENS Resolver on your domain & try again.",
+            });
+            setButtonLoader(false);
+      });
   };
 
   const handleSelection = (valueSelected) => {
