@@ -90,15 +90,14 @@ const Profile = () => {
             });
             setButtonLoader(false);
           });
-        })
-    .catch((_) => {
-       messageApi.open({
-         type: "error",
-         content: "Set ENS Resolver before trying again.",
-       });
-       setButtonLoader(false);
-     });
-    };
+      })
+      .catch((_) => {
+            messageApi.open({
+              type: "error",
+              content: "Transaction cancelled by user.",
+            });
+            setButtonLoader(false);
+      });
   };
 
   return (
