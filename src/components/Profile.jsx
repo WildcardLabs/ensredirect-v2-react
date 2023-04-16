@@ -92,11 +92,11 @@ const Profile = () => {
           });
       })
       .catch((_) => {
-            messageApi.open({
-              type: "error",
-              content: "Set ENS Resolver on your domain & try again.",
-            });
-            setButtonLoader(false);
+        messageApi.open({
+          type: "error",
+          content: "Set ENS Resolver on your domain & try again.",
+        });
+        setButtonLoader(false);
       });
   };
 
@@ -421,6 +421,15 @@ const Profile = () => {
                 }}
                 hoverable={true}
               >
+                <p
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bolder",
+                    textAlign: "center",
+                  }}
+                >
+                  Edit your profile
+                </p>
                 <div>
                   <Form name="form_item_path" onFinish={handleFormSubmission}>
                     <Form.Item>
