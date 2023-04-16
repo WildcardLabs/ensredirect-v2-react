@@ -185,11 +185,11 @@ const Home = () => {
           });
       })
       .catch((_) => {
-            messageApi.open({
-              type: "error",
-              content: "Set ENS Resolver on your domain & try again.",
-            });
-            setButtonLoader(false);
+        messageApi.open({
+          type: "error",
+          content: "Set ENS Resolver on your domain & try again.",
+        });
+        setButtonLoader(false);
       });
   };
 
@@ -486,7 +486,7 @@ const Home = () => {
               <Result
                 status="success"
                 title="Transaction Successful"
-                subTitle='Test redirect by appending ".limo" on any browser e.g. ensredirect.eth.limo'
+                subTitle='Test redirect by appending ".limo" on any browser e.g. ensredirect.eth.limo (Note: resolving the domain might take a few minutes,1st time only)'
                 extra={[
                   <Button
                     type="primary"
@@ -500,7 +500,7 @@ const Home = () => {
                     target={"_blank"}
                     href={`https://etherscan.io/tx/${transactionHash}`}
                   >
-                    Etherscan
+                    View Etherscan
                   </Button>,
                 ]}
               />
@@ -755,7 +755,7 @@ const Home = () => {
               <Result
                 status="success"
                 title="Transaction Successful"
-                subTitle='Test redirect by appending ".limo" on any browser e.g. ensredirect.eth.limo'
+                subTitle='Test redirect by appending ".limo" on any browser e.g. ensredirect.eth.limo (Note: resolving the domain might take a few minutes,1st time only)'
                 extra={[
                   <Button
                     type="primary"
@@ -769,7 +769,7 @@ const Home = () => {
                     target={"_blank"}
                     href={`https://etherscan.io/tx/${transactionHash}`}
                   >
-                    Etherscan
+                    View Etherscan
                   </Button>,
                 ]}
               />

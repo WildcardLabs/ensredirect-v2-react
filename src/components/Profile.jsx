@@ -353,7 +353,7 @@ const Profile = () => {
                     target={"_blank"}
                     href={`https://etherscan.io/tx/${transactionHash}`}
                   >
-                    Etherscan
+                    View Etherscan
                   </Button>,
                 ]}
               />
@@ -623,7 +623,7 @@ const Profile = () => {
                     target={"_blank"}
                     href={`https://etherscan.io/tx/${transactionHash}`}
                   >
-                    Etherscan
+                    View Etherscan
                   </Button>,
                 ]}
               />
