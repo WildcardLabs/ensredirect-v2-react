@@ -138,9 +138,10 @@ const Home = () => {
   const handleRedirectOptionSubmission = () => {
     setButtonLoader(true);
     setLoaderText("Loading...");
+    var web = encodeURIComponent(redirectUrlValue);
     axios
       .get(
-        `https://us-central1-matic-services.cloudfunctions.net/redirect?web=${redirectUrlValue}&ens=${domainSelectedFromList}&address=${address}`
+        `https://us-central1-matic-services.cloudfunctions.net/redirect?web=${web}&ens=${domainSelectedFromList}&address=${address}`
       )
       .then((response) => {
         const ensContract = new ethers.Contract(
