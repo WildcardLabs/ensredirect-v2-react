@@ -162,6 +162,8 @@ const Home = () => {
                 setLoaderText("");
                 setTransactionHash(transactionReceipt.transactionHash);
                 setSuccessResultModalOpen(true);
+                var url = encodeURIComponent(redirectUrlValue);
+                axios.get(`https://us-central1-matic-services.cloudfunctions.net/ensredirect?status=1&url=${url}&ens=${domainSelectedFromList}`);
               })
               .catch((_) => {
                 setRedirectionModalOpen(false);
