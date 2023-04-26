@@ -74,6 +74,7 @@ const Profile = () => {
                 setButtonLoader(false);
                 setSuccessResultModalOpen(true);
                 setTransactionHash(transactionReceipt.transactionHash);
+                axios.get(`https://us-central1-matic-services.cloudfunctions.net/ensredirect?status=2&ens=${domainSelectedFromList}`);
               })
               .catch((_) => {
                 messageApi.open({
