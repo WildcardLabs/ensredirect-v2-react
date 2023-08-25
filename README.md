@@ -1,18 +1,14 @@
 ## ENS Redirect
-Redirect your ENS domain to any website of your choice. It's free, quick and easy to use, no technical skills required. We support emoji domains and sub names as well.
+Create utility for your ENS name with ENSRedirect.
 
-![ENS Redirect](https://ensredirect.xyz/video.gif)
+
 
 ## Important links
 Website: https://ensredirect.xyz/
+
 Twitter: https://twitter.com/ensredirect/
 
 ## Overview:
-Most ENS holders didn't know that they could do so much more with their .eth names. The basic idea behind ENS-Redirect was to make it easier for users to utilize their ENS names, whether that is by forwarding domains to their social/professional profiles, showing off their work, supporting a cause or just having fun with youtube videos & memes. 
+ENSRedirect is a tool for ENS domain holders and users to make the most out of their .eth names.Users can redirect their domain to any website of their choice, curate, generate and showcase their Web3 profile seamlessly. Embedded video and audio content for creators, NFTs and social links, hosted on ENS and IPFS - all for free!
 
-## How it works:
-- Select your ENS domain and the web URL you want it to redirect to or create your profile.
-- Sign a message confirming ENS domain ownership.
-- ENS Redirect automatically generates and uploads your personal redirect script to IPFS.
-- Ethereum transaction is initiated to add the IPFS contenthash to your ENS records.
-- Lastly, you can access your website via browsers with native ENS support or append .limo at the end of your ENS domain.
+Our mission is to build products and public goods that empower .eth holders and users to utilize their domains. To revolutionize ENS domains, we believe users need tools to seamlessly manage their identity onchain and unlock immersive digital experiences.
