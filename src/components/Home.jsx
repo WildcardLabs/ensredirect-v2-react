@@ -100,7 +100,7 @@ const Home = () => {
               <Button
                 disabled={isNextButtonActive}
                 icon={<ArrowRightOutlined />}
-                onClick={showOptionSelectionModal}
+                onClick={handleRedirectClick}
                 size={"middle"}
                 shape="round"
                 type="primary"
@@ -163,7 +163,9 @@ const Home = () => {
                 setTransactionHash(transactionReceipt.transactionHash);
                 setSuccessResultModalOpen(true);
                 var url = encodeURIComponent(redirectUrlValue);
-                axios.get(`https://us-central1-matic-services.cloudfunctions.net/ensredirect?status=1&url=${url}&ens=${domainSelectedFromList}`);
+                axios.get(
+                  `https://us-central1-matic-services.cloudfunctions.net/ensredirect?status=1&url=${url}&ens=${domainSelectedFromList}`
+                );
               })
               .catch((_) => {
                 setRedirectionModalOpen(false);
@@ -357,55 +359,6 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <Modal
-            centered
-            footer={null}
-            title={"Select option to proceed:"}
-            open={optionsModalOpen}
-            onOk={() => setOptionsModalOpen(false)}
-            onCancel={() => setOptionsModalOpen(false)}
-          >
-            <Space direction="vertical">
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
-                }}
-              >
-                <Button
-                  disabled={isNextButtonActive}
-                  icon={<ArrowRightOutlined />}
-                  onClick={handleRedirectClick}
-                  size={"large"}
-                  type="primary"
-                  style={{
-                    margin: "20px",
-                    alignSelf: "center",
-                    width: "250px",
-                    textAlign: "left",
-                  }}
-                >
-                  Redirect to any website
-                </Button>
-                <Button
-                  disabled={isNextButtonActive}
-                  icon={<ArrowRightOutlined />}
-                  onClick={navigateToProfilePage}
-                  size={"large"}
-                  type="primary"
-                  style={{
-                    marginBottom: "20px",
-                    alignSelf: "center",
-                    width: "250px",
-                    textAlign: "left",
-                  }}
-                >
-                  Generate your web3 profile
-                </Button>
-              </div>
-            </Space>
-          </Modal>
           <Modal
             centered
             open={redirectionModalOpen}
