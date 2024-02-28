@@ -315,7 +315,7 @@ const Home = () => {
                     marginTop: 10,
                   }}
                 />
-                <p>team@ensredirect.xyz</p>
+                <p>team@wildcards.wtf</p>
               </div>
 
               <div
@@ -324,8 +324,8 @@ const Home = () => {
                 }}
               >
                 <SocialIcon
-                  network="twitter"
-                  url="https://twitter.com/ensredirect"
+                  network="x"
+                  url="https://x.com/ensredirect"
                   target="_blank"
                   style={{
                     height: 35,
@@ -525,7 +525,7 @@ const Home = () => {
               >
                 <SocialIcon
                   network="email"
-                  url="mailto:team@ensredirect.xyz"
+                  url="mailto:team@wildcards.wtf"
                   target="_blank"
                   style={{
                     height: 35,
@@ -535,7 +535,7 @@ const Home = () => {
                     marginTop: 10,
                   }}
                 />
-                <p>team@ensredirect.xyz</p>
+                <p>team@wildcards.wtf</p>
               </div>
 
               <div
@@ -544,8 +544,8 @@ const Home = () => {
                 }}
               >
                 <SocialIcon
-                  network="twitter"
-                  url="https://twitter.com/ensredirect"
+                  network="x"
+                  url="https://x.com/ensredirect"
                   target="_blank"
                   style={{
                     height: 35,
@@ -565,7 +565,7 @@ const Home = () => {
               >
                 <SocialIcon
                   network="github"
-                  url="https://github.com/ENS-Redirect/ensredirect-v2-react"
+                  url="https://github.com/WildcardLabs/ensredirect-v2-react"
                   target="_blank"
                   style={{
                     height: 35,
