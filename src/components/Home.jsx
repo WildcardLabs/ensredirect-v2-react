@@ -260,10 +260,8 @@ const Home = () => {
             Maximize your web3 presence with your ENS domain
           </p>
           <p className="subtitle">
-            Add utility to your .eth domain with ENSRedirect. Curate and
-            showcase your web3 profile by seamlessly integrating videos and
-            podcasts from your favorite social platforms, or easily redirect
-            your domain to any website of your choice – all for free.
+            Add utility to your .eth domain with ENSRedirect. Redirect your
+            domain to any website of your choice for free.
           </p>
           <div
             style={{
@@ -480,10 +478,8 @@ const Home = () => {
             Maximize your web3 presence with your ENS domain
           </p>
           <p className="subtitle">
-            Add utility to your .eth domain with ENSRedirect. Curate and
-            showcase your web3 profile by seamlessly integrating videos and
-            podcasts from your favorite social platforms, or easily redirect
-            your domain to any website of your choice – all for free.
+            Add utility to your .eth domain with ENSRedirect. Redirect your
+            domain to any website of your choice for free.
           </p>
           <div
             style={{
