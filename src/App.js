@@ -2,32 +2,23 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./components/Home";
 import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum } from "wagmi/chains";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
+import { RainbowKitProvider, getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { WagmiProvider, http } from "wagmi";
+import { mainnet } from "wagmi/chains";
 import Profile from "./components/Profile";
 import ActiveStateContext from "./components/Context";
 import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const { chains, provider } = configureChains(
-  [mainnet, polygon, optimism, arbitrum],
-  [
-    alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_ID }),
-    publicProvider(),
-  ]
-);
+const queryClient = new QueryClient();
 
-const { connectors } = getDefaultWallets({
+const config = getDefaultConfig({
   appName: "ENS Redirect",
-  chains,
-});
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
+  projectId: "2aca272d18deb10ff748260da5f78bfd",
+  chains: [mainnet],
+  transports: {
+    [mainnet.id]: http(),
+  },
 });
 
 const App = () => {
@@ -44,19 +35,21 @@ const App = () => {
   };
 
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
-        <ActiveStateContext.Provider value={context}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/*" element={<Navigate to="/"/>} />
-              <Route path="/profile" element={<Profile />} />
-            </Routes>
-          </BrowserRouter>
-        </ActiveStateContext.Provider>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
+          <ActiveStateContext.Provider value={context}>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/*" element={<Navigate to="/" />} />
+                <Route path="/profile" element={<Profile />} />
+              </Routes>
+            </BrowserRouter>
+          </ActiveStateContext.Provider>
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 };
 

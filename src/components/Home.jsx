@@ -1,7 +1,8 @@
 import axios from "axios";
-import { ethers } from "ethers";
+import { providers, ethers } from "ethers";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useWalletClient } from "wagmi";
 import Header from "./Header";
 import { SocialIcon } from "react-social-icons";
 import React, { useContext, useEffect, useState } from "react";
@@ -21,7 +22,8 @@ import ActiveStateContext from "./Context";
 import "../App.css";
 
 const Home = () => {
-  const { address, signer } = useContext(ActiveStateContext);
+  const signer = useEthersSigner();
+  const { address } = useContext(ActiveStateContext);
   const [messageApi, contextHolder] = message.useMessage();
   const domainabi = [
     "function setContenthash(bytes32 node, bytes calldata hash)",
@@ -120,6 +122,27 @@ const Home = () => {
     );
   };
 
+  function walletClientToSigner(walletClient) {
+    const { account, chain, transport } = walletClient;
+    const network = {
+      chainId: chain.id,
+      name: chain.name,
+      ensAddress: chain.contracts?.ensRegistry?.address,
+    };
+
+    const provider = new providers.Web3Provider(transport, network);
+    const signer = provider.getSigner(account.address);
+    return signer;
+  }
+
+  function useEthersSigner({ chainId } = {}) {
+    const { data: walletClient } = useWalletClient({ chainId });
+    return React.useMemo(
+      () => (walletClient ? walletClientToSigner(walletClient) : undefined),
+      [walletClient]
+    );
+  }
+
   const fetchAddressDomains = () => {
     axios
       .get(
@@ -189,12 +212,15 @@ const Home = () => {
             setLoaderText("");
           });
       })
-      .catch((_) => {
+      .catch((error) => {
+        console.log(error);
         messageApi.open({
           type: "error",
           content: "Set ENS Resolver on your domain & try again.",
         });
+        setRedirectUrlValue("");
         setButtonLoader(false);
+        setLoaderText("");
       });
   };
 
