@@ -1,13 +1,13 @@
 import { Col, Image, Row } from "antd";
 import logo from "../redirect2.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useSigner } from "wagmi";
+import { useAccountEffect } from "wagmi";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ActiveStateContext from "./Context";
 
 const Header = () => {
-  useAccount({
+  useAccountEffect({
     onConnect({ address, connector, isReconnected }) {
       setAddress(address);
       setIsConnected(true);
@@ -19,12 +19,6 @@ const Header = () => {
   });
 
   const navigate = useNavigate();
-
-  const { data: signer } = useSigner();
-
-  useEffect(() => {
-    setSigner(signer);
-  }, [signer]);
 
   const { setAddress, setIsConnected, setSigner } =
     useContext(ActiveStateContext);
