@@ -35,14 +35,7 @@ const Header = () => {
           </div>
         </Col>
         <Col span={5} offset={11} type="flex" align="middle">
-          <ConnectButton
-            showBalance={false}
-            chainStatus={"none"}
-            accountStatus={{
-              smallScreen: "avatar",
-              largeScreen: "full",
-            }}
-          />
+          <ConnectButton />
         </Col>
       </Row>
     </>
