@@ -85,6 +85,7 @@ const Profile = () => {
               });
           })
           .catch((_) => {
+            console.error("setContenthash error:", error);
             messageApi.open({
               type: "error",
               content: "Transaction cancelled by user.",
